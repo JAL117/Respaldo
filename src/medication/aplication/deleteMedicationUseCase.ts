@@ -1,15 +1,15 @@
+import { Medication } from "../domain/medication";
 import { MedicationRepository } from "../domain/medicationRepository";
 
-export class DeleteMedicationUseCase {
-  constructor(readonly medicationRepository: MedicationRepository) {}
-
-  async run(name: string): Promise<boolean> {
-    try {
-      const isDeleted = await this.medicationRepository.deleteMedication(name);
-      return isDeleted;
-    } catch (error) {
-      console.error('Error in DeleteMedicationUseCase', error);
-      return false;
+export class DeleteMedicationUseCase{
+    constructor(readonly medicationRepository:MedicationRepository){}
+    async run(name:string):Promise<Medication | null>{
+        try {
+            const eliminarTarea = await this.medicationRepository.deleteMedication(name);
+            return eliminarTarea;
+        } catch (error) {  
+            console.log("Error en deleteTarea.Caso.Uso", error);
+            return null;
+        }
     }
-  }
 }

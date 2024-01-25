@@ -62,19 +62,25 @@ export class PgsqlMedicationRepository implements MedicationRepository {
     }
   }
 
-  async deleteMedication(name: string): Promise<boolean> {
+  async deleteMedication(name: string): Promise<Medication | null> {
     try {
-      const deletedRowCount = await MedicationModel.destroy({
-        where: { name }
-      });
-  
-      return deletedRowCount > 0;
+        const deleteMedication = await MedicationModel.findOne({where: {name : name}});
+        if(deleteMedication){
+            await deleteMedication.destroy();
+            return new Medication(deleteMedication.id,  deleteMedication.name, deleteMedication.price , deleteMedication.quantity);
+        }else{
+            return null;
+        }
     } catch (error) {
-      console.error("Error in PgsqlMedicationRepository", error);
-      return false;
+        console.log("Error in mysqlMedicationRepository", error);
+        return null;
     }
-  }
+}
+  
+
+  
+}
   
 
 
-}
+

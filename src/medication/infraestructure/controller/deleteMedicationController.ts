@@ -1,33 +1,33 @@
-
 import { Request, Response } from "express";
 import { DeleteMedicationUseCase } from "../../aplication/deleteMedicationUseCase";
 
-export class DeleteMedicationController {
-  constructor(readonly deleteMedicationUseCase: DeleteMedicationUseCase) {}
+export class DeleteMedicationController{
+    constructor(readonly deleteMedicationUseCase:DeleteMedicationUseCase){}
+    async run(req:Request, res:Response){
+        try {
+            let name = req.body.name;
+            console.log(req.body);
 
-  async run(req: Request, res: Response) {
-    try {
-      const { name } = req.params;
+            let deleteMedication = await this.deleteMedicationUseCase.run(name);
 
-      const isDeleted = await this.deleteMedicationUseCase.run(name);
+            if(deleteMedication){
+                res.status(200).send({
+                    message:"Medication delete"
+                })
+            }else{
+                return res.status(400).send({
+                    status:"success",
+                    data:[],
+                    message:"Error in deleteMedicationcontroller"
+                })
+            }
 
-      if (isDeleted) {
-        return res.status(200).send({
-          status: "success",
-          message: "Medicamento eliminado"
-        });
-      } else {
-        return res.status(404).send({
-          status: "error",
-          message: "No se encontró el medicamento para eliminar"
-        });
-      }
-    } catch (error) {
-      console.error("Error en el controlador", error);
-      res.status(500).send({
-        status: "error",
-        message: "Error en el servidor"
-      });
-    }
-  }
+        } catch (error) {
+            console.log("Error in deleteMedicationcontroller",error);
+            res.status(500).send({
+                status:"error",
+                message:"Error in server"
+            })
+        }
+    } 
 }
