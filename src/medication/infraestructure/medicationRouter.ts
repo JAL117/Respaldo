@@ -1,5 +1,6 @@
 import express from "express";
-import { addMedicationController, getAllMedicationController, putPriceMedicationController } from "./dependencies";
+import { addMedicationController, getAllMedicationController, putPriceMedicationController , deleteMedicationController} from "./dependencies";
+
 
 export const medicationRouter = express.Router();
 
@@ -32,3 +33,14 @@ medicationRouter.put("/:name", (req, res) => {
     return res.sendStatus(500);
   }
 });
+
+medicationRouter.delete("/:name",(req , res)=>{
+  try {
+    deleteMedicationController.run.bind(deleteMedicationController)(req,res);
+    return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+})
+
